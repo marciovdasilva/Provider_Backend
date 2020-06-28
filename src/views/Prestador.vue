@@ -1,32 +1,34 @@
 <template>
   <div>
     
-    <md-checkbox v-model="teste" > aaaaaaaa {{ teste }} </md-checkbox>
+    <AuthOrApp/>
 
     <li v-for="servico in listOcupacoes" :key="servico._id" class="listaOcupacoes">
       <md-checkbox v-model="listChecked" :value="servico._id" >{{servico.ocupacao}}</md-checkbox>
-
-      
-
     </li>
+
+    {{ descricaoServico }}
+    
     <md-button @click="gravarOcupacao">
       <span>Gravar</span>
     </md-button>
-
-        
-
-    {{listChecked}}        
 
   </div>
 </template>
 
 <script>
 import {mapGetters} from 'vuex'
+import AuthOrApp from '../components/AuthOrApp'
+
 export default {
+    components: {
+        AuthOrApp
+    },
   data: () => ({
     listOcupacoes: [],
     listCadastrados: [],
     listChecked:[],
+    descricaoServico:'',
     teste: false
   }),
 
@@ -43,12 +45,18 @@ export default {
     },
     async buscarCadastrados(){
         try {
-            console.log("Neh", this.usuario)
+            
             const url = `/servicoUsuario/${this.usuario._id}`
-            console.log('URL', url)
+            
             let response = await this.$http.get(url)
 
-            this.listChecked = response.data;
+            console.log('buscar', response)
+
+            this.listChecked = response.data.ocupacao
+
+            this.descricaoServico = response.data.descricao
+
+
         } catch (error) {
             console.log('aqui')
         }
@@ -69,11 +77,15 @@ export default {
         }
     }
   },
+
   computed:{
     ...mapGetters(["usuario"]),
   },
+
   async mounted() {
+    
     await this.buscarOcupacoes();
+
     await this.buscarCadastrados();
   }
 

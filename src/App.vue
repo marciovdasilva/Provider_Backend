@@ -51,7 +51,7 @@
                       {{ usuarioLogado }}
                       <span>{{usuario.nome}}</span>
                       <md-divider></md-divider>
-                      <md-button>Logout</md-button>
+                      <md-button @click="logout">Logout</md-button>
                     </div>
                   </div>
                 </md-menu-content>
@@ -171,7 +171,8 @@
 <script>
 import CadastroUsuario from "../src/components/CadastroUsuario";
 import Login from "../src/components/Login";
-import { mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
+
 export default {
   name: "App",
 
@@ -205,13 +206,19 @@ export default {
   }),
 
   methods: {
+    ...mapMutations(['setUsuario']),
     crieSuaConta() {
       this.showModalCadastroUsuaio = !this.showModalCadastroUsuaio;
     },
 
     login() {
       this.showModalLogin = !this.showModalLogin;
+    },
+    logout(){
+      this.setUsuario({})      
+      localStorage.removeItem('usuario')
     }
+
   },
 
   computed: {

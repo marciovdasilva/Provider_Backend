@@ -66,6 +66,10 @@ export default {
         
         if (response.data._id != undefined){          
           this.setUsuario(response.data)
+
+          console.log('object no login', response.data)
+
+          localStorage.setItem('usuario', JSON.stringify(response.data));
         }
 
         this.$emit('input',false)

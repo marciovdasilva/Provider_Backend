@@ -10,7 +10,7 @@
 <script>
 export default {
   name: "Contatenos",
-  components: [],
+  components: {},
 
   data: () => ({}),
 

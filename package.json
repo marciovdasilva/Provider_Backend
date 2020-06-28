@@ -49,7 +49,9 @@
       "vue/mustache-interpolation-spacing": "warn",
       "vue/no-multi-spaces": "warn",
       "vue/no-unused-vars": "off",
-      "no-unused-vars": "warn"
+      "vue/no-unused-labels": "off",
+      "no-unused-vars": "warn",
+      "no-unused-labels": "warn"
     }
   },
   "browserslist": [

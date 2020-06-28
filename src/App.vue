@@ -21,7 +21,8 @@
         <div class="md-layout-item barraMediaSocial">
           <div class="md-layout-item md-layout md-gutter" v-if="!isUsuarioLogado">
             <div>
-              <md-button></md-button><!--ajustar alinhamento-->
+              <md-button></md-button>
+              <!--ajustar alinhamento-->
               <md-button></md-button>
               <md-button class="md-primary" @click="crieSuaConta">Crie a sua conta</md-button>
               <md-button class="md-primary" @click="login">Entre</md-button>
@@ -37,7 +38,7 @@
               <!-- colocar uma botão-->
               <md-menu md-size="big" md-direction="top-start" :md-active.sync="toggleCard">
                 <md-button class="md-icon-button" md-menu-trigger>
-                  <md-icon class="Person">person </md-icon>
+                  <md-icon class="Person">person</md-icon>
                 </md-button>
 
                 <md-menu-content>
@@ -48,7 +49,9 @@
 
                     <div class="author-card-info">
                       {{ usuarioLogado }}
-                      <span>Marcos Moura</span>
+                      <span>{{usuario.nome}}</span>
+                      <md-divider></md-divider>
+                      <md-button>Logout</md-button>
                     </div>
                   </div>
                 </md-menu-content>
@@ -80,10 +83,13 @@
         <md-app-toolbar class="md-large md-dense">
           <div class="md-toolbar-row">
             <div class="md-toolbar-section-start">
-              <!-- menu
-              <md-button class="md-icon-button" @click="menuVisible = !menuVisible">
+              <md-button
+                class="md-icon-button"
+                @click="menuVisible = !menuVisible"
+                v-if="isUsuarioPrestador"
+              >
                 <md-icon>menu</md-icon>
-              </md-button>-->
+              </md-button>
 
               <span class="md-title">
                 <h1>
@@ -117,17 +123,21 @@
             </md-tabs>
           </div>
         </md-app-toolbar>
-        <!--
-        <md-app-drawer :md-active.sync="menuVisible">
+
+        <md-app-drawer :md-active.sync="menuVisible" v-if="isUsuarioPrestador">
           <md-toolbar class="md-transparent" md-elevation="0">Navigation</md-toolbar>
 
           <md-list>
             <md-list-item>
               <md-icon>move_to_inbox</md-icon>
-              <span class="md-list-item-text">Inbox</span>
+
+              <md-button to="/prestador">
+                <md-icon>construction</md-icon>
+                <span>Serviço</span>
+              </md-button>
             </md-list-item>
 
-            <md-list-item>
+            <!--s<md-list-item>
               <md-icon>send</md-icon>
               <span class="md-list-item-text">Sent Mail</span>
             </md-list-item>
@@ -140,9 +150,9 @@
             <md-list-item>
               <md-icon>error</md-icon>
               <span class="md-list-item-text">Spam</span>
-            </md-list-item>
+            </md-list-item>-->
           </md-list>
-        </md-app-drawer>-->
+        </md-app-drawer>
 
         <md-app-content>
           <md-divider></md-divider>
@@ -175,6 +185,7 @@ export default {
     showModalLogin: false,
     menuVisible: false,
     selectedEmployee: null,
+    toggleCard: false,
     employees: [
       "Jim Halpert",
       "Dwight Schrute",
@@ -202,6 +213,7 @@ export default {
       this.showModalLogin = !this.showModalLogin;
     }
   },
+
   computed: {
     ...mapGetters(["usuario"]),
 
@@ -212,6 +224,9 @@ export default {
     isUsuarioLogado() {
       let logado = this.usuario.email || "";
       return logado != "" ? true : false;
+    },
+    isUsuarioPrestador() {
+      return this.usuario.tipo == "prestador";
     }
   }
 };
@@ -242,5 +257,4 @@ export default {
   align-items: left;
   justify-content: left;
 }
-
 </style>

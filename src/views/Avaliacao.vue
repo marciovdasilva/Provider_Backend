@@ -7,7 +7,7 @@
 <script>
 export default {
   name: "Avaliacao",
-  components: [],
+  components: {},
 
   data: () => ({}),
 

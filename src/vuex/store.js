@@ -18,6 +18,6 @@ export default new Vuex.Store({
 
     getters: {
         usuario: state => state.usuario
-    },
+    },    
 
 })

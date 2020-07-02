@@ -1,32 +1,43 @@
 <template>
   <div class="md-container">
-    
-    <span class="md-title">
-      <h2>
-        Muito mais facil contratar um colaborador, escolha o melhor
-        <span class="PontoLaranja">.</span>
-      </h2>
-    </span>
-
-    <img src="../assets/Profissao-definicao1.png" alt="Paris" />
+    <ResultadoBuscaDeServico v-if="mostraResultadoPesquisa" />
+    <TelaInicial v-else />
   </div>
 </template>
 
 <script>
-import CardInfoServico from "../components/CardInfoServico"
+import TelaInicial from "../components/TelaInicial";
+import CardInfoServico from "../components/CardInfoServico";
+import { EventBus } from "../functions/eventBus";
+import ResultadoBuscaDeServico from "../components/ResultadoBuscaDeServico";
+import {mapGetters } from "vuex";
+
 export default {
   name: "Home",
   components: {
     CardInfoServico,
+    TelaInicial,
+    ResultadoBuscaDeServico
   },
 
   data: () => ({
-    inforser: {titulo: 'teste', descricao: 'sdfaçdfkjaçsdkfjakdh fçahdçfakhdka hçdfhaçdfkhaçdslkfh'}
+    inforser: {
+      titulo: "teste",
+      descricao: "sdfaçdfkjaçsdkfjakdh fçahdçfakhdka hçdfhaçdfkhaçdslkfh"
+    },
+    mostraPesquisa: false
   }),
+  computed:{
+    ...mapGetters(["mostraResultadoPesquisa"])
+  },
 
   mounted() {
-    console.log("dentro da home");
     
+    EventBus.$on("servicoSelecionado", (payload) => {this.mostraPesquisa = payload});
+  },
+
+  beforeDestroy() {
+    EventBus.$off("servicoSelecionado");
   }
 };
 </script>

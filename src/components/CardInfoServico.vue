@@ -39,8 +39,14 @@ export default {
 <style>
 .md-card {
   width: 320px;
-  margin: 4px;
+  height: 400px;
+  margin: 15px;
   display: inline-block;
   vertical-align: top;
+}
+
+.md-card-content{
+  overflow: hidden;
+  height: 85px;
 }
 </style>

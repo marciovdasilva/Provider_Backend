@@ -19,8 +19,7 @@
             v-model="selectedOcupacao"
             :md-options="filtroServicos"
             md-layout="box"
-            :md-selected="executaPesquisa()"
-            :md-opened="abrirViewConsulta()"
+            :md-changed="changeSelecaoOcupacao()"
           >
             <label>Oque procura...</label>
           </md-autocomplete>
@@ -42,15 +41,15 @@
 </template>
 
 <script>
+const converteItemParaSeletor = x => ({
+  id: x._id,
+  descricao: x.ocupacao,
+  toLowerCase: () => x.ocupacao.toLowerCase(),
+  toString: () => x.ocupacao
+});
 
-const converteItemParaSeletor = (x) => ({
-                        'id':x._id,
-                        'descricao':x.ocupacao,
-                        'toLowerCase':()=>x.ocupacao.toLowerCase(),
-                        'toString':()=>x.ocupacao
-                        })
-
-import { mapGetters, mapMutations } from "vuex";
+import { mapGetters, mapMutations, mapActions } from "vuex";
+import { EventBus } from "../functions/eventBus";
 
 export default {
   name: "CabecalhoUsuario",
@@ -67,28 +66,33 @@ export default {
   }),
 
   methods: {
-    ...mapMutations(["setUsuario"]),
+    ...mapMutations(["setUsuario", "setMostraResultadoPesquisa"]),
 
     async carregaServicos() {
       try {
-        let response = await this.$http.get("/ocupacao")
+        let response = await this.$http.get("/ocupacao");
 
-        this.listaServicos = response.data
+        this.listaServicos = response.data;
       } catch (error) {
         console.log(error);
       }
     },
-    executaPesquisa(){
-      if (this.selectedOcupacao == null)
-        return
-     
-      //this.$router.push({ name: 'ResultadoServico', params: {listaPrestadores: []} })
+    executaPesquisa() {
+      //EventBus.$emit('servicoSelecionado',true)
     },
 
-    abrirViewConsulta(){
-      //alert('aa')
-      //this.$router.push({ name: 'ResultadoServico', params: {listaPrestadores: []} })
-      //this.$router.replace('/ResultadoServico')
+    changeSelecaoOcupacao() {
+      if (this.selectedOcupacao == null || this.selectedOcupacao == "") {
+        this.setMostraResultadoPesquisa(false);
+        //EventBus.$emit("servicoSelecionado",false)
+        return;
+      }
+      this.$store.dispatch(
+        "pesquisaPrestadoresPorOcupacao",
+        this.selectedOcupacao
+      );
+
+      //EventBus.$emit("servicoSelecionado",true)
     }
   },
 
@@ -97,9 +101,9 @@ export default {
 
     filtroServicos() {
       let teste = this.listaServicos.map(converteItemParaSeletor);
-      console.log('filtroServico', teste)
+      console.log("filtroServico", teste);
       return teste;
-    },
+    }
   },
   async mounted() {
     this.carregaServicos();
